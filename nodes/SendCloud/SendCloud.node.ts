@@ -20,6 +20,7 @@ export class SendCloud implements INodeType {
     version: 1,
     subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
     description: 'Envia emails transacionais via SendCloud (sendcloud.dev.br)',
+    usableAsTool: true,
     defaults: { name: 'SendCloud' },
     inputs: [NodeConnectionTypes.Main],
     outputs: [NodeConnectionTypes.Main],
