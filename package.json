@@ -1,0 +1,56 @@
+{
+  "name": "n8n-nodes-sendcloud",
+  "version": "0.1.1",
+  "description": "n8n community node for SendCloud \u2014 Brazilian transactional email API (sendcloud.dev.br)",
+  "keywords": [
+    "n8n-community-node-package",
+    "n8n",
+    "sendcloud",
+    "email",
+    "transactional-email"
+  ],
+  "license": "MIT",
+  "homepage": "https://sendcloud.dev.br",
+  "author": {
+    "name": "Fabiano Bispo",
+    "email": "fbc623@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fabianoobispo1/n8n-nodes-sendcloud.git"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc && node scripts/copy-assets.mjs",
+    "dev": "tsc --watch",
+    "type-check": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/SendCloudApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/SendCloud/SendCloud.node.js",
+      "dist/nodes/SendCloudTrigger/SendCloudTrigger.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "n8n-workflow": "^1.70.0",
+    "typescript": "^5.3.0"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  },
+  "bugs": {
+    "url": "https://github.com/fabianoobispo1/n8n-nodes-sendcloud/issues"
+  }
+}
