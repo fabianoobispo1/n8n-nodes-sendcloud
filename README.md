@@ -1,10 +1,10 @@
 # n8n-nodes-sendcloud
 
-Node comunitário do [n8n](https://n8n.io) para o [SendCloud](https://sendcloud.dev.br) — API brasileira de email transacional.
+[n8n](https://n8n.io) community node for [SendCloud](https://sendcloud.dev.br) — a Brazilian transactional email API.
 
-## Instalação
+## Installation
 
-No n8n: **Settings → Community Nodes → Install** e digite `n8n-nodes-sendcloud`.
+In n8n: **Settings → Community Nodes → Install** and enter `n8n-nodes-sendcloud`.
 
 Self-hosted via CLI:
 
@@ -12,44 +12,44 @@ Self-hosted via CLI:
 npm install n8n-nodes-sendcloud
 ```
 
-## Credencial
+## Credentials
 
-1. Crie uma conta em [sendcloud.dev.br](https://sendcloud.dev.br) e verifique seu domínio de envio
-2. Gere uma API key em **Dashboard → API Keys**
-3. No n8n, crie a credencial **SendCloud API** com a chave
+1. Create an account at [sendcloud.dev.br](https://sendcloud.dev.br) and verify your sending domain
+2. Generate an API key in **Dashboard → API Keys**
+3. In n8n, create a **SendCloud API** credential with the key
 
 ## Nodes
 
 ### SendCloud
 
-| Resource | Operações |
+| Resource | Operations |
 |---|---|
-| Email | Send, Send Batch (template para até 500 destinatários), Get, Get Many, Cancel (agendados), Resend |
-| Template | Get, Get Many, Render (preview com dados de teste) |
+| Email | Send, Send Batch (template to up to 500 recipients), Get, Get Many, Cancel (scheduled), Resend |
+| Template | Get, Get Many, Render (preview with test data) |
 
-O envio suporta HTML, texto puro ou template Handlebars com variáveis, além de cc/bcc, reply-to, tags, metadata, agendamento (`scheduledFor`), chave de idempotência e anexos a partir de dados binários do workflow.
+Sending supports HTML, plain text, or Handlebars templates with variables, plus cc/bcc, reply-to, tags, metadata, scheduling (`scheduledFor`), idempotency keys, and attachments from workflow binary data.
 
 ### SendCloud Trigger
 
-Recebe eventos de email via webhook, com registro/remoção automática do endpoint na ativação do workflow:
+Receives email events via webhook, with automatic endpoint registration/removal when the workflow is activated:
 
 `sent` · `delivered` · `bounced` · `opened` · `clicked` · `failed` · `unsubscribed` · `quota.warning`
 
-A assinatura HMAC-SHA256 (header `X-SendCloud-Signature`) é validada por padrão.
+The HMAC-SHA256 signature (`X-SendCloud-Signature` header) is validated by default.
 
-## Exemplo
+## Example
 
-Workflow típico: **Webhook (seu app) → SendCloud: Send (template `boas_vindas`) → SendCloud Trigger (bounced) → Slack**.
+Typical workflow: **Webhook (your app) → SendCloud: Send (template `welcome`) → SendCloud Trigger (bounced) → Slack**.
 
-## Desenvolvimento
+## Development
 
 ```bash
 npm install
 npm run build
 ```
 
-A publicação no npm é feita pelo workflow [`publish.yml`](.github/workflows/publish.yml) (GitHub Actions) com [npm provenance](https://docs.npmjs.com/generating-provenance-statements) via trusted publishing.
+Publishing to npm is done by the [`publish.yml`](.github/workflows/publish.yml) workflow (GitHub Actions) with [npm provenance](https://docs.npmjs.com/generating-provenance-statements) via trusted publishing.
 
-## Licença
+## License
 
 MIT

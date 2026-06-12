@@ -31,7 +31,7 @@ export async function sendCloudApiRequest(
   }
 }
 
-/** Aceita "a@b.com, c@d.com" e retorna string única ou array. */
+/** Accepts "a@b.com, c@d.com" and returns a single string or an array. */
 export function parseToField(raw: string): string | string[] {
   const parts = raw
     .split(',')
@@ -40,13 +40,13 @@ export function parseToField(raw: string): string | string[] {
   return parts.length === 1 ? parts[0] : parts
 }
 
-/** Parseia um parâmetro JSON do n8n (string ou objeto) com erro amigável. */
+/** Parses an n8n JSON parameter (string or object) with a friendly error. */
 export function parseJsonParameter(value: unknown, fieldName: string): IDataObject {
   if (value === undefined || value === null || value === '') return {}
   if (typeof value === 'object') return value as IDataObject
   try {
     return JSON.parse(String(value)) as IDataObject
   } catch {
-    throw new Error(`O campo "${fieldName}" não contém JSON válido`)
+    throw new Error(`The "${fieldName}" field does not contain valid JSON`)
   }
 }

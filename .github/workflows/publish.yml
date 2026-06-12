@@ -18,13 +18,13 @@ jobs:
           node-version: 22
           registry-url: https://registry.npmjs.org
 
-      # Trusted publishing (OIDC) exige npm >= 11.5.1
+      # Trusted publishing (OIDC) requires npm >= 11.5.1
       - run: npm install -g npm@latest
 
       - run: npm ci
 
       - run: npm run build
 
-      # Com Trusted Publisher configurado no npmjs.com, o publish usa OIDC
-      # (sem token) e gera o provenance statement automaticamente
+      # With a Trusted Publisher configured on npmjs.com, publish uses OIDC
+      # (no token) and generates the provenance statement automatically
       - run: npm publish

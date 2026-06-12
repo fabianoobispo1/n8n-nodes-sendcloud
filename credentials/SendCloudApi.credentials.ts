@@ -20,14 +20,14 @@ export class SendCloudApi implements ICredentialType {
       typeOptions: { password: true },
       default: '',
       required: true,
-      description: 'API key do workspace (crie em Dashboard → API Keys)',
+      description: 'Workspace API key (create one in Dashboard → API Keys)',
     },
     {
       displayName: 'Base URL',
       name: 'baseUrl',
       type: 'string',
       default: 'https://api.sendcloud.dev.br',
-      description: 'URL da API. Altere apenas em instalações self-hosted.',
+      description: 'API URL. Change only for self-hosted installations.',
     },
   ]
 

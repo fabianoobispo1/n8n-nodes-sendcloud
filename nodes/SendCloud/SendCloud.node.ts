@@ -19,7 +19,7 @@ export class SendCloud implements INodeType {
     group: ['output'],
     version: 1,
     subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
-    description: 'Envia emails transacionais via SendCloud (sendcloud.dev.br)',
+    description: 'Send transactional emails via SendCloud (sendcloud.dev.br)',
     usableAsTool: true,
     defaults: { name: 'SendCloud' },
     inputs: [NodeConnectionTypes.Main],
@@ -46,12 +46,12 @@ export class SendCloud implements INodeType {
         noDataExpression: true,
         displayOptions: { show: { resource: ['email'] } },
         options: [
-          { name: 'Send', value: 'send', description: 'Enviar um email', action: 'Send an email' },
-          { name: 'Send Batch', value: 'sendBatch', description: 'Enviar template para vários destinatários (máx 500)', action: 'Send a batch of emails' },
-          { name: 'Get', value: 'get', description: 'Buscar um email pelo ID', action: 'Get an email' },
-          { name: 'Get Many', value: 'getMany', description: 'Listar emails', action: 'Get many emails' },
-          { name: 'Cancel', value: 'cancel', description: 'Cancelar email agendado', action: 'Cancel a scheduled email' },
-          { name: 'Resend', value: 'resend', description: 'Reenviar um email', action: 'Resend an email' },
+          { name: 'Send', value: 'send', description: 'Send an email', action: 'Send an email' },
+          { name: 'Send Batch', value: 'sendBatch', description: 'Send a template to multiple recipients (max 500)', action: 'Send a batch of emails' },
+          { name: 'Get', value: 'get', description: 'Get an email by ID', action: 'Get an email' },
+          { name: 'Get Many', value: 'getMany', description: 'List emails', action: 'Get many emails' },
+          { name: 'Cancel', value: 'cancel', description: 'Cancel a scheduled email', action: 'Cancel a scheduled email' },
+          { name: 'Resend', value: 'resend', description: 'Resend an email', action: 'Resend an email' },
         ],
         default: 'send',
       },
@@ -63,8 +63,8 @@ export class SendCloud implements INodeType {
         type: 'string',
         required: true,
         default: '',
-        placeholder: 'Nome <noreply@seudominio.com.br>',
-        description: 'Remetente — o domínio precisa estar verificado no workspace',
+        placeholder: 'Name <noreply@yourdomain.com>',
+        description: 'Sender — the domain must be verified in your workspace',
         displayOptions: { show: { resource: ['email'], operation: ['send', 'sendBatch'] } },
       },
       {
@@ -73,8 +73,8 @@ export class SendCloud implements INodeType {
         type: 'string',
         required: true,
         default: '',
-        placeholder: 'cliente@exemplo.com',
-        description: 'Destinatário(s). Separe múltiplos com vírgula (máx 50).',
+        placeholder: 'customer@example.com',
+        description: 'Recipient(s). Separate multiple addresses with commas (max 50).',
         displayOptions: { show: { resource: ['email'], operation: ['send'] } },
       },
       {
@@ -82,7 +82,7 @@ export class SendCloud implements INodeType {
         name: 'subject',
         type: 'string',
         default: '',
-        description: 'Assunto. Obrigatório quando não usar template.',
+        description: 'Subject line. Required when not using a template.',
         displayOptions: { show: { resource: ['email'], operation: ['send'] } },
       },
       {
@@ -119,7 +119,7 @@ export class SendCloud implements INodeType {
         type: 'options',
         typeOptions: { loadOptionsMethod: 'getTemplates' },
         default: '',
-        description: 'Template Handlebars do workspace. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
+        description: 'Handlebars template from your workspace. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
         displayOptions: { show: { resource: ['email'], operation: ['send'], emailType: ['template'] } },
       },
       {
@@ -127,7 +127,7 @@ export class SendCloud implements INodeType {
         name: 'templateData',
         type: 'json',
         default: '{}',
-        description: 'Variáveis do template, ex: {"nome": "Maria"}',
+        description: 'Template variables, e.g. {"name": "Maria"}',
         displayOptions: { show: { resource: ['email'], operation: ['send'], emailType: ['template'] } },
       },
       {
@@ -138,14 +138,14 @@ export class SendCloud implements INodeType {
         default: {},
         displayOptions: { show: { resource: ['email'], operation: ['send'] } },
         options: [
-          { displayName: 'Attachments (Binary Properties)', name: 'attachments', type: 'string', default: '', description: 'Nomes das propriedades binárias do item, separados por vírgula (ex: data,arquivo2). Máx 10 arquivos / 10 MB.' },
-          { displayName: 'BCC', name: 'bcc', type: 'string', default: '', description: 'Separar múltiplos com vírgula' },
-          { displayName: 'CC', name: 'cc', type: 'string', default: '', description: 'Separar múltiplos com vírgula' },
-          { displayName: 'Idempotency Key', name: 'idempotencyKey', type: 'string', default: '', description: 'Evita envio duplicado em retentativas' },
+          { displayName: 'Attachments (Binary Properties)', name: 'attachments', type: 'string', default: '', description: 'Comma-separated names of the item binary properties (e.g. data,file2). Max 10 files / 10 MB.' },
+          { displayName: 'BCC', name: 'bcc', type: 'string', default: '', description: 'Separate multiple addresses with commas' },
+          { displayName: 'CC', name: 'cc', type: 'string', default: '', description: 'Separate multiple addresses with commas' },
+          { displayName: 'Idempotency Key', name: 'idempotencyKey', type: 'string', default: '', description: 'Prevents duplicate sends on retries' },
           { displayName: 'Metadata', name: 'metadata', type: 'json', default: '{}' },
           { displayName: 'Reply To', name: 'replyTo', type: 'string', default: '' },
-          { displayName: 'Scheduled For', name: 'scheduledFor', type: 'dateTime', default: '', description: 'Agendar envio (máx 30 dias no futuro)' },
-          { displayName: 'Tags', name: 'tags', type: 'string', default: '', description: 'Separar múltiplas com vírgula' },
+          { displayName: 'Scheduled For', name: 'scheduledFor', type: 'dateTime', default: '', description: 'Schedule the send (max 30 days in the future)' },
+          { displayName: 'Tags', name: 'tags', type: 'string', default: '', description: 'Separate multiple tags with commas' },
         ],
       },
 
@@ -157,7 +157,7 @@ export class SendCloud implements INodeType {
         typeOptions: { loadOptionsMethod: 'getTemplates' },
         required: true,
         default: '',
-        description: 'Template enviado a todos os destinatários. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
+        description: 'Template sent to every recipient. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
         displayOptions: { show: { resource: ['email'], operation: ['sendBatch'] } },
       },
       {
@@ -165,8 +165,8 @@ export class SendCloud implements INodeType {
         name: 'recipients',
         type: 'json',
         required: true,
-        default: '[\n  { "to": "a@exemplo.com", "templateData": { "nome": "Ana" } }\n]',
-        description: 'Array de destinatários (máx 500), cada um com templateData opcional',
+        default: '[\n  { "to": "a@example.com", "templateData": { "name": "Ana" } }\n]',
+        description: 'Array of recipients (max 500), each with optional templateData',
         displayOptions: { show: { resource: ['email'], operation: ['sendBatch'] } },
       },
 
@@ -208,7 +208,7 @@ export class SendCloud implements INodeType {
         options: [
           { displayName: 'Created After', name: 'from', type: 'dateTime', default: '' },
           { displayName: 'Created Before', name: 'to', type: 'dateTime', default: '' },
-          { displayName: 'Search', name: 'search', type: 'string', default: '', description: 'Busca por destinatário ou assunto' },
+          { displayName: 'Search', name: 'search', type: 'string', default: '', description: 'Search by recipient or subject' },
           {
             displayName: 'Status',
             name: 'status',
@@ -237,9 +237,9 @@ export class SendCloud implements INodeType {
         noDataExpression: true,
         displayOptions: { show: { resource: ['template'] } },
         options: [
-          { name: 'Get', value: 'get', description: 'Buscar um template pelo ID', action: 'Get a template' },
-          { name: 'Get Many', value: 'getMany', description: 'Listar templates do workspace', action: 'Get many templates' },
-          { name: 'Render', value: 'render', description: 'Renderizar template com dados de teste (não envia)', action: 'Render a template' },
+          { name: 'Get', value: 'get', description: 'Get a template by ID', action: 'Get a template' },
+          { name: 'Get Many', value: 'getMany', description: 'List workspace templates', action: 'Get many templates' },
+          { name: 'Render', value: 'render', description: 'Render a template with test data (does not send)', action: 'Render a template' },
         ],
         default: 'getMany',
       },
@@ -258,7 +258,7 @@ export class SendCloud implements INodeType {
         name: 'renderData',
         type: 'json',
         default: '{}',
-        description: 'Variáveis para renderização, ex: {"nome": "Maria"}',
+        description: 'Variables for rendering, e.g. {"name": "Maria"}',
         displayOptions: { show: { resource: ['template'], operation: ['render'] } },
       },
     ],
@@ -341,7 +341,7 @@ export class SendCloud implements INodeType {
         } else if (resource === 'email' && operation === 'sendBatch') {
           const recipients = parseJsonParameter(this.getNodeParameter('recipients', i), 'Recipients')
           if (!Array.isArray(recipients)) {
-            throw new NodeOperationError(this.getNode(), 'O campo "Recipients" precisa ser um array JSON', { itemIndex: i })
+            throw new NodeOperationError(this.getNode(), 'The "Recipients" field must be a JSON array', { itemIndex: i })
           }
           responseData = await sendCloudApiRequest.call(this, 'POST', '/v1/emails/batch', {
             from: this.getNodeParameter('from', i) as string,
@@ -391,7 +391,7 @@ export class SendCloud implements INodeType {
           const data = parseJsonParameter(this.getNodeParameter('renderData', i), 'Data')
           responseData = await sendCloudApiRequest.call(this, 'POST', `/v1/templates/${id}/preview`, { data })
         } else {
-          throw new NodeOperationError(this.getNode(), `Operação não suportada: ${resource}.${operation}`, { itemIndex: i })
+          throw new NodeOperationError(this.getNode(), `Unsupported operation: ${resource}.${operation}`, { itemIndex: i })
         }
 
         const executionData = this.helpers.constructExecutionMetaData(

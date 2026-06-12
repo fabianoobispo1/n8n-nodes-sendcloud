@@ -20,7 +20,7 @@ export class SendCloudTrigger implements INodeType {
     group: ['trigger'],
     version: 1,
     subtitle: '={{$parameter["events"].join(", ")}}',
-    description: 'Dispara quando o SendCloud envia um evento de email (entrega, bounce, abertura, clique…)',
+    description: 'Starts the workflow when SendCloud sends an email event (delivery, bounce, open, click…)',
     defaults: { name: 'SendCloud Trigger' },
     inputs: [],
     outputs: [NodeConnectionTypes.Main],
@@ -40,14 +40,14 @@ export class SendCloudTrigger implements INodeType {
         type: 'multiOptions',
         required: true,
         options: [
-          { name: 'Bounced', value: 'bounced', description: 'Email rejeitado permanentemente' },
-          { name: 'Clicked', value: 'clicked', description: 'Link do email clicado' },
-          { name: 'Delivered', value: 'delivered', description: 'Email entregue ao servidor de destino' },
-          { name: 'Failed', value: 'failed', description: 'Falha no envio' },
-          { name: 'Opened', value: 'opened', description: 'Email aberto (pixel de tracking)' },
-          { name: 'Quota Warning', value: 'quota.warning', description: 'Quota do plano em 80% ou 100%' },
-          { name: 'Sent', value: 'sent', description: 'Email aceito pelo SMTP' },
-          { name: 'Unsubscribed', value: 'unsubscribed', description: 'Destinatário cancelou inscrição' },
+          { name: 'Bounced', value: 'bounced', description: 'Email permanently rejected' },
+          { name: 'Clicked', value: 'clicked', description: 'A link in the email was clicked' },
+          { name: 'Delivered', value: 'delivered', description: 'Email delivered to the destination server' },
+          { name: 'Failed', value: 'failed', description: 'Send failed' },
+          { name: 'Opened', value: 'opened', description: 'Email opened (tracking pixel)' },
+          { name: 'Quota Warning', value: 'quota.warning', description: 'Plan quota at 80% or 100%' },
+          { name: 'Sent', value: 'sent', description: 'Email accepted by the SMTP server' },
+          { name: 'Unsubscribed', value: 'unsubscribed', description: 'Recipient unsubscribed' },
         ],
         default: ['delivered', 'bounced'],
       },
@@ -89,7 +89,7 @@ export class SendCloudTrigger implements INodeType {
         })
 
         staticData.webhookId = response.id
-        // O secret só é retornado na criação — guardado para validar a assinatura HMAC
+        // The secret is only returned on creation — stored to validate the HMAC signature
         staticData.webhookSecret = response.secret
         return true
       },
@@ -100,7 +100,7 @@ export class SendCloudTrigger implements INodeType {
           try {
             await sendCloudApiRequest.call(this, 'DELETE', `/v1/webhooks/${staticData.webhookId}`)
           } catch {
-            // webhook já removido no servidor — segue a desativação local
+            // webhook already removed on the server — proceed with local deactivation
           }
           delete staticData.webhookId
           delete staticData.webhookSecret
